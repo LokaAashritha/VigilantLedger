@@ -1,13 +1,13 @@
 # 🏦 VigilantLedger
 
-## ⚠️ The Problem (What is broken?)
+## ⚠️ The Problem
 When cybercriminals steal money online today, they don't leave it in one place. They use automated scripts to instantly split and transfer the stolen cash across a long chain of **10 to 20 different "mule accounts"** within seconds. 
 
 Traditional bank security systems are **passive**. They look at the data *after* the money is transferred, notice the theft, and print an alert on a dashboard for a human worker to review. By the time a human checks the alert, the money has already cleared the chain and vanished completely. 
 
 ---
 
-## 💡 The Solution (What I am building)
+## 💡 The Solution
 **VigilantLedger** is a smart, high-speed automated defense engine for banking systems built out of personal curiosity to tackle this real-world security challenge.
 
 Instead of waiting for theft to happen and logging an alert, this system sits right in the middle of the payment flow and checks transactions **in-flight (while they are happening)**. 
