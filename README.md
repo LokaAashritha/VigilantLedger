@@ -1,20 +1,62 @@
-# 🏦 VigilantLedger
+# 🚀 VigilantLedger
+### Autonomous Agentic Pipeline for Automated Ledger Compilation, Anomaly Triage, & Risk Scoring
 
-## ⚠️ The Problem
-When cybercriminals steal money online today, they don't leave it in one place. They use automated scripts to instantly split and transfer the stolen cash across a long chain of **10 to 20 different "mule accounts"** within seconds. 
+**VigilantLedger** is a conceptual blueprint and architectural specification for an enterprise-grade AI pipeline designed to eliminate manual financial data entry, prevent AI hallucination risks, and enforce strict regulatory compliance in corporate accounting workflows.
 
-Traditional bank security systems are **passive**. They look at the data *after* the money is transferred, notice the theft, and print an alert on a dashboard for a human worker to review. By the time a human checks the alert, the money has already cleared the chain and vanished completely. 
+By combining modern **Large Language Model (LLM)** natural language extraction with traditional **deterministic software guardrails**, VigilantLedger creates a secure, auditable bridge between unstructured business documents and core relational financial ledgers.
 
 ---
 
-## 💡 The Solution
-**VigilantLedger** is a smart, high-speed automated defense engine for banking systems built out of personal curiosity to tackle this real-world security challenge.
+## ⚠️ 1. The Core Problem Statement
 
-Instead of waiting for theft to happen and logging an alert, this system sits right in the middle of the payment flow and checks transactions **in-flight (while they are happening)**. 
+Modern corporate finance departments process thousands of financial events daily via unstructured artifacts: PDF invoices, email receipts, foreign exchange slips, and unformatted bank logs.
 
-When a payment request comes in, the system instantly runs two automated checks:
-1. **Velocity Check:** It looks to see if a user is suddenly spamming payments (e.g., trying to send more than 3 payments in under a single minute).
-2. **Chain Check:** It scans the receiver's account history to see if they behave like a "mule account" that immediately forwards incoming money out to other random accounts.
+* **The Compilation Bottleneck:** Manual data extraction and typing into core relational databases (such as PostgreSQL) is slow, expensive, and prone to human typos.
+* **The Hallucination & Corruption Risk:** Standard AI scripts that write directly to a database risk introducing corrupted JSON schemas, incorrect currencies, or hallucinated numbers into financial ledgers.
+* **The Compliance Deficit:** Traditional database pipelines lack a "cognitive layer" capable of cross-referencing qualitative transaction intent against dollar volumes or high-risk entity lists prior to state mutation.
 
-If the system catches these patterns, it **takes action instantly**. It intercepts the transaction thread, automatically freezes the compromised accounts, and rolls back the database ledger so that **no money ever leaves the account boundaries**. This moves banking security from passive watching to active protection.
+---
 
+## 💡 2. Architectural Solution
+
+VigilantLedger solves these challenges through a **4-Layer Operational Pipeline** that enforces strict separation between **AI reasoning** and **database mutation**.
+
+Instead of trusting AI outputs implicitly, VigilantLedger treats LLM-parsed records as **provisional hypotheses**. Every record is assigned an extraction confidence score and routed through an automated threshold gate. High-confidence records commit automatically, while low-confidence or anomalous records are isolated into a **Human-in-the-Loop (HITL)** triage queue.
+
+---
+
+## 🧱 3. System Architecture & 4-Layer Pipeline
+
+```text
+               [ Unstructured Financial Data Input ]
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │  Layer 1: Ingestion   │ ◄── (FastAPI Endpoint & Pydantic v2)
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │ Layer 2: Cognitive    │ ◄── (Claude 3.5 Sonnet Tool Use)
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │ Layer 3: Safety Gate  │ ◄── (Confidence Threshold & Anomaly Check)
+                    └───────────┬───────────┘
+                                │
+                  ┌─────────────┴─────────────┐
+                  ▼                           ▼
+         [ Confidence >= 0.85 ]      [ Confidence < 0.85 ]
+                  │                           │
+                  ▼                           ▼
+      ┌───────────────────────┐   ┌───────────────────────┐
+      │   Automated Release   │   │ Asynchronous HITL Hub │ ◄── (Human Review Queue)
+      └───────────┬───────────┘   └───────────┬───────────┘
+                  │                           │
+                  └─────────────┬─────────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │ Layer 4: State Commit │ ◄── (JWT RBAC + PostgreSQL Ledger)
+                    └───────────────────────┘
